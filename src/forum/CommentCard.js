@@ -141,7 +141,7 @@ function CommentCard({ comment, currentUser, isRefreshRequired }) {
         </View>
       ) : (
         <View>
-          <Text>Author ID: {commentAuthor}</Text>
+          <Text>Username: {commentAuthor}</Text>
           <Text>{commentContent}</Text>
           <Text style={{ textAlign: "right" }}>
             Created On: {commentCreatedOnString}

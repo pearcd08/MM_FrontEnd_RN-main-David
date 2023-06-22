@@ -98,7 +98,7 @@ const MentalDisorders = ({
             ? isCounsellor
               ? "Update what you can \n provide help with"
               : "Update what you need \n help with"
-            : isCounsellor
+            : !isCounsellor
             ? "What do you need \n  help with?"
             : "What can you provide \n help with?"}
         </Text>

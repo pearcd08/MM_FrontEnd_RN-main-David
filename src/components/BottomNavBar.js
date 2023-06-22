@@ -9,6 +9,7 @@ import TitleBar from "./TItleBar";
 // SCREENS
 import HomeScreen from "../screens/Home";
 import EditProfile from "../screens/EditProfile";
+import AdminEditProfile from "../screens/AdminEditProfile";
 
 // COUNSELLOR STACK
 import Counsellors from "../screens/Counsellors";
@@ -217,23 +218,43 @@ const BottomNavBar = () => {
               />
             )}
 
-            <Tab.Screen
-              name="Profile"
-              component={EditProfile}
-              initialParams={{ user: user }}
-              options={{
-                tabBarIcon: ({ color, size, focused }) => (
-                  <View style={{ alignItems: "center" }}>
-                    <Ionicons
-                      name={focused ? "person" : "person-outline"}
-                      size={size}
-                      color={color}
-                    />
-                    <Text style={{ color }}>{"Profile"}</Text>
-                  </View>
-                ),
-              }}
-            />
+            {isAdmin ? (
+              <Tab.Screen
+                name="Profile"
+                component={AdminEditProfile}
+                initialParams={{ user: user }}
+                options={{
+                  tabBarIcon: ({ color, size, focused }) => (
+                    <View style={{ alignItems: "center" }}>
+                      <Ionicons
+                        name={focused ? "person" : "person-outline"}
+                        size={size}
+                        color={color}
+                      />
+                      <Text style={{ color }}>{"Profile"}</Text>
+                    </View>
+                  ),
+                }}
+              />
+            ) : (
+              <Tab.Screen
+                name="Profile"
+                component={EditProfile}
+                initialParams={{ user: user }}
+                options={{
+                  tabBarIcon: ({ color, size, focused }) => (
+                    <View style={{ alignItems: "center" }}>
+                      <Ionicons
+                        name={focused ? "person" : "person-outline"}
+                        size={size}
+                        color={color}
+                      />
+                      <Text style={{ color }}>{"Profile"}</Text>
+                    </View>
+                  ),
+                }}
+              />
+            )}
           </Tab.Navigator>
         </View>
       )}

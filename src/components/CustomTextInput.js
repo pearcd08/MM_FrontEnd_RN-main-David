@@ -86,7 +86,7 @@ const CustomTextInput = forwardRef(
                   style={[
                     styles.input,
                     error ? styles.inputError : null,
-                    multiline ? { height: 200 } : null,
+                    multiline ? { height: numberOfLines * 40 } : null,
                     multiline ? styles.multiline : null,
                   ]}
                   keyboardType={keyboardType}

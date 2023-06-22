@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
 import axios from "axios";
+import { styles } from "../styles/style";
 
 function CommentForm({
   isCommentUpdate,
@@ -25,7 +26,6 @@ function CommentForm({
   const [currentUser, setCurrentUser] = useState([]);
   const [commentContent, setCommentContent] = useState("");
   const [forumPostID, setForumPostID] = useState("");
-  
 
   useEffect(() => {
     if (oldData) {
@@ -102,13 +102,17 @@ function CommentForm({
     }
   }
   return (
-    <View>
+    <View
+      style={{ justifyContent: "center", alignItems: "center", marginTop: 25 }}
+    >
       <CustomTextInput
         control={control}
-        header="Comment"
+        header="New Comment"
         fieldName="commentContent"
         placeholder="Enter comment here."
         defaultValue={commentContent}
+        multiline={true}
+        numberOfLines={2}
         rules={{
           required: "Comment text is required",
           maxLength: {
@@ -118,13 +122,15 @@ function CommentForm({
         }}
       />
 
-      <CustomButton text={"Cancel"} onPress={cancelHandler} type={"big"} />
+      <View style={styles.buttonContainer}>
+        <CustomButton text={"Cancel"} onPress={cancelHandler} type={"small"} />
 
-      <CustomButton
-        text={"Save Comment"}
-        onPress={handleSubmit(saveCommentHandler)}
-        type={"big"}
-      />
+        <CustomButton
+          text={"Comment"}
+          onPress={handleSubmit(saveCommentHandler)}
+          type={"small"}
+        />
+      </View>
     </View>
   );
 }
