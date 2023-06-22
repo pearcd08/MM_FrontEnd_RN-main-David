@@ -253,6 +253,8 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
     });
   };
 
+  // update
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
