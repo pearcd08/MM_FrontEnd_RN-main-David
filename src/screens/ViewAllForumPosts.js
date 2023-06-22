@@ -146,7 +146,7 @@ export default function ViewAllForumPosts({ route }) {
       </View>
       <FlatList
         data={postsToView}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => `${item.id}-${new Date().getTime()}`}
         renderItem={renderPost}
       />
     </View>
