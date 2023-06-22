@@ -286,8 +286,78 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
                 }}
               />
             </View>
+
             {/* If this is an update form, just display the post type, as it cannot be changed. */}
             {isUpdate ? (
+
+          )}
+          <Text style={[styles.inputHeader, { marginBottom: 10 }]}>
+            Categories
+          </Text>
+          <View
+            style={{
+              width: "85%",
+              alignItems: "stretch",
+            }}
+          >
+            <View
+              style={{ width: "85%", alignItems: "stretch", maxHeight: 150 }}
+            ></View>
+
+            <MultiSelect
+              onOpen={() => {
+                // Perform actions when the MultiSelect list is opened
+                console.log("MultiSelect list opened!");
+                // Add your custom logic here
+              }}
+              styles={[styles.input, { zIndex: 2 }]}
+              items={postContentCategoryList}
+              uniqueKey="id"
+              onSelectedItemsChange={onPostContentCategoryHandler}
+              selectedItems={postContentCategory}
+              selectText=" Pick up to 3 Categories"
+              searchInputPlaceholderText="Search Categories..."
+              tagContainerStyle={{
+                backgroundColor: "white",
+                flexDirection: "row",
+                width: "48%",
+              }}
+              tagRemoveIconColor="#F49097"
+              tagBorderColor="black"
+              tagTextColor="black"
+              selectedItemIconColor="#F49097"
+              selectedItemTextColor="#CCC"
+              fixedHeight={true}
+              itemTextColor="#000"
+              dropdownPosition="top"
+              submitButtonColor="#55D6C2"
+              submitButtonText="Confirm"
+              styleDropdownMenuSubsection={styles.input}
+              styleListContainer={{ height: 150, width: "100%" }}
+              searchInputStyle={{
+                height: 50,
+              }}
+            />
+          </View>
+          <CustomTextInput
+            control={control}
+            header="Post Content"
+            fieldName="postContent"
+            placeholder="Enter post content here..."
+            defaultValue={postContent}
+            multiline={true}
+            numberOfLines={10}
+            onChangeText={setPostContent}
+            rules={{
+              maxLength: {
+                value: 5000,
+                message: "The post cannot be more than 5000 characters long",
+              },
+            }}
+          />
+          {isEvent ? (
+            <View>
+
               <View>
                 <Text style={styles.inputHeader}>Post Type</Text>
                 <Text style={[styles.input, { textTransform: "capitalize" }]}>
