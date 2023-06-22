@@ -56,7 +56,7 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
   const [postType, setPostType] = useState("");
   const [postContent, setPostContent] = useState("");
   const [createdOn, setCreatedOn] = useState(new Date());
-  const [postContentCategory, setPostContentCategory] = useState();
+  const [postContentCategory, setPostContentCategory] = useState("");
   const [eventDateTime, setEventDateTime] = useState(new Date());
 
   // Helper variables.
@@ -226,11 +226,19 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
 
   const onPostHandler = (data) => {
     // if the form data comes back as undefined, it means no update was made to that field.
-    console.log("line 204");
+    if (postType === "undefined" || postType === ""){
+      console.log('hit alert')
+      Alert.alert("Missing Field", "Please select a post type")
+    }
+    else if (postContentCategory === "undefined" || postContentCategory === ""){
+      console.log('hit alert')
+      Alert.alert("Missing Field", "Please enter at least one content category")
+    }
+    else{console.log("line 204");
     console.log(data);
     setTitle(data.title);
     setPostContent(data.postContent);
-
+    
     const saveData = {
       authorID: authorID,
       title: data.title,
@@ -242,7 +250,7 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
     };
 
     console.log(saveData);
-    onSave(saveData);
+    onSave(saveData);}
   };
 
   return (

@@ -55,7 +55,7 @@ const TreatmentMethods = ({
       setTreatmentMethods(tempTreatments);
       nextStep();
     } else {
-      Alert.alert("Missing Field", "Pick atleast one Treatment Method");
+      Alert.alert("Missing Field", "Pick at least one Treatment Method");
     }
   };
 
