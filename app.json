@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "React Native",
+    "slug": "mind-magic",
+    "privacy": "public",
+    "description": "mind magic app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dpearce87.mindmagic"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.mindmagictester.mindmagic"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "502187b7-558a-45d1-aaea-039822bfe924"
+      }
+    },
+    "owner": "mindmagictester",
+//    "runtimeVersion": {
+//      "policy": "sdkVersion"
+//    },
+    "updates": {
+//      "url": "https://u.expo.dev/502187b7-558a-45d1-aaea-039822bfe924"
+    }
+  }
+}
