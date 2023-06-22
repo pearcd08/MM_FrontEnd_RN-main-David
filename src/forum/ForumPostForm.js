@@ -356,8 +356,8 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
             onChangeText={setPostContent}
             rules={{
               maxLength: {
-                value: 5000,
-                message: "The post cannot be more than 5000 characters long",
+                value: 1000,
+                message: "The post cannot be more than 1000 characters long",
               },
             }}
           />
