@@ -295,7 +295,6 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
             ) : (
               <View style={{ width: "85%", alignItems: "stretch" }}>
                 <Text style={styles.inputHeader}>Post Type</Text>
-
                 <DropDownPicker
                   items={postTypeChoices}
                   open={postTypeOpen}
