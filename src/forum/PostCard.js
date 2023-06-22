@@ -40,6 +40,18 @@ function PostCard({
 
   const [authorIsCurrentUser, setAuthorIsCurrentUser] = useState(false);
 
+  // // Set all the const
+  // useEffect(() => {
+  //   setPostId(id);
+  //   setPostTitle(title);
+  //   setPostPostType(postType);
+  //   setPostPostContent(postContent);
+  //   setPostCreatedOn(createdOn);
+  //   setPostEventDateTime(eventDateTime);
+  //   setPostAuthorID(authorID);
+  //   setPostPostContentCategory(postContentCategory);
+  // }, [id]);
+
   // Check if is admin
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -120,6 +132,7 @@ function PostCard({
       authorName: postAuthorName,
       keywordBadges: keywordBadges,
     };
+
     navigation.navigate("ForumPostDetail", { token: token, post: post });
   }
 
@@ -175,7 +188,7 @@ function PostCard({
         .request(config)
         .then((response) => {
           console.log(JSON.stringify(response.data));
-          navigation.goBack();
+          navigation.navigate("ViewAllForumPosts");
         })
 
         .catch((error) => {
