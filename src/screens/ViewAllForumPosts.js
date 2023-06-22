@@ -29,9 +29,14 @@ export default function ViewAllForumPosts({ route }) {
   // The filters that have been chosen to filter posts on.
   const [chosenFilters, setChosenFilters] = useState([]);
 
+  // Boolean to toggle whenever the api call for posts needs to be re-done.
+  const [refreshRequired, setRefreshRequired] = useState(true);
+
   // This is used to reload the screen once navigation.goBack is run.
   const isFocused = useIsFocused();
 
+
+  
   // Upon loading, gets all the posts from the api.
   useEffect(() => {
     async function fetchPosts() {
@@ -68,7 +73,7 @@ export default function ViewAllForumPosts({ route }) {
       }
     }
     fetchPosts();
-  }, [isFocused]);
+  }, [isFocused, refreshRequired]);
 
   // When the chosenFilters useState changes, the posts are refiltered to adjust to the new filters selected.
   useEffect(() => {
@@ -88,6 +93,10 @@ export default function ViewAllForumPosts({ route }) {
     navigation.navigate("CreateForumPost", { user: currentUser });
   }
 
+  function onRefreshHandler(){
+    setRefreshRequired(!refreshRequired)
+  }
+
   // Sends the data for each post through to the PostCard.
   function renderPost({ item }) {
     const postProps = {
@@ -101,6 +110,7 @@ export default function ViewAllForumPosts({ route }) {
       eventDateTime: item.eventDateTime,
       authorUser: item.authorUser,
       currentUser: currentUser,
+      refreshHandler: onRefreshHandler
     };
     return <PostCard {...postProps} />;
   }

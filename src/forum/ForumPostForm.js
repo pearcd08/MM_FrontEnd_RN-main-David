@@ -4,7 +4,7 @@
 // Update time and date wasn't working, fixed now
 // Added modals for time and date.
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import {
   SafeAreaView,
@@ -17,7 +17,6 @@ import {
   Platform,
   TouchableOpacity,
   StyleSheet,
-  KeyboardAvoidingView,
 } from "react-native";
 import CustomTextInput from "../components/CustomTextInput";
 import { useForm } from "react-hook-form";
@@ -65,6 +64,9 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
   const [postContentCategoryList, setPostContentCategoryList] = useState([]);
   const [isEvent, setIsEvent] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  // Boolean to toggle whenever the api call for comments needs to be re-done.
+  const [refreshRequired, setRefreshRequired] = useState(true);
 
   // isDateVisible refers to whether or not the eventDateTime variable should be shown on the screen.
   const [isDateVisible, setIsDateVisible] = useState(false);
@@ -243,51 +245,57 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
     onSave(saveData);
   };
 
-  const scrollViewRef = useRef(null);
-  const contentRef = useRef(null);
-
-  const handleTextInputPress = () => {
-    scrollViewRef.current.scrollTo({
-      y: contentRef.current.offsetTop,
-      animated: true,
-    });
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1 }}
-          ref={scrollViewRef}
-        >
-          <View style={styles.inputContainer}>
-            <View>
-              <Text style={styles.titleHeader}>
-                {isUpdate ? "Update Post" : "Create New Post"}
-              </Text>
-              <CustomTextInput
-                control={control}
-                header="Title"
-                fieldName="title"
-                placeholder="Enter post title"
-                defaultValue={title}
-                multiline={false}
-                onChangeText={setTitle}
-                rules={{
-                  required: "Post title is required",
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.inputContainer}>
+          <View>
+            <Text style={styles.titleHeader}>
+              {isUpdate ? "Update Post" : "Create New Post"}
+            </Text>
+            <CustomTextInput
+              control={control}
+              header="Title"
+              fieldName="title"
+              placeholder="Enter post title"
+              defaultValue={title}
+              multiline={false}
+              onChangeText={setTitle}
+              rules={{
+                required: "Post title is required",
 
-                  maxLength: {
-                    value: 200,
-                    message: "The post title can only be 200 characters long",
-                  },
-                }}
+                maxLength: {
+                  value: 200,
+                  message: "The post title can only be 200 characters long",
+                },
+              }}
+            />
+          </View>
+          {/* If this is an update form, just display the post type, as it cannot be changed. */}
+          {isUpdate ? (
+            <View>
+              <Text style={styles.inputHeader}>Post Type</Text>
+              <Text style={{ textTransform: "capitalize" }}>{postType} </Text>
+            </View>
+          ) : (
+            <View style={{ width: "85%", alignItems: "stretch" }}>
+              <Text style={styles.inputHeader}>Post Type</Text>
+
+              <DropDownPicker
+                items={postTypeChoices}
+                open={postTypeOpen}
+                setOpen={() => setPostTypeOpen(!postTypeOpen)}
+                value={postType}
+                setValue={(value) => setPostType(value)}
+                closeAfterSelecting={true}
+                placeholder="Select the purpose of this post"
+                style={[
+                  styles.dropDown,
+                  { fontSize: 16 },
+                  postTypeOpen ? { marginBottom: 90 } : { marginBottom: 10 },
+                ]}
               />
             </View>
-
-            {/* If this is an update form, just display the post type, as it cannot be changed. */}
-            {isUpdate ? (
-
           )}
           <Text style={[styles.inputHeader, { marginBottom: 10 }]}>
             Categories
@@ -355,258 +363,160 @@ function ForumPostForm({ isForumPostUpdate, oldData, onCancel, onSave }) {
           />
           {isEvent ? (
             <View>
-
               <View>
-                <Text style={styles.inputHeader}>Post Type</Text>
-                <Text style={[styles.input, { textTransform: "capitalize" }]}>
-                  {postType}{" "}
-                </Text>
+                <Text style={styles.inputHeader}>Date of Event</Text>
               </View>
-            ) : (
-              <View style={{ width: "85%", alignItems: "stretch" }}>
-                <Text style={styles.inputHeader}>Post Type</Text>
-
-                <DropDownPicker
-                  items={postTypeChoices}
-                  open={postTypeOpen}
-                  setOpen={() => setPostTypeOpen(!postTypeOpen)}
-                  value={postType}
-                  setValue={(value) => setPostType(value)}
-                  closeAfterSelecting={true}
-                  placeholder="Select the purpose of this post"
-                  style={[
-                    styles.dropDown,
-                    { fontSize: 16 },
-                    postTypeOpen ? { marginBottom: 90 } : { marginBottom: 10 },
-                  ]}
-                />
-              </View>
-            )}
-            <Text style={[styles.inputHeader, { marginBottom: 10 }]}>
-              Categories
-            </Text>
-            <View
-              style={{
-                width: "85%",
-                alignItems: "stretch",
-              }}
-            >
               <View
-                style={{ width: "85%", alignItems: "stretch", maxHeight: 150 }}
-              ></View>
-
-              <MultiSelect
-                onOpen={() => {
-                  // Perform actions when the MultiSelect list is opened
-                  console.log("MultiSelect list opened!");
-                  // Add your custom logic here
-                }}
-                styles={[styles.input, { zIndex: 2 }]}
-                items={postContentCategoryList}
-                uniqueKey="id"
-                onSelectedItemsChange={onPostContentCategoryHandler}
-                selectedItems={postContentCategory}
-                selectText=" Pick up to 3 Categories"
-                searchInputPlaceholderText="Search Categories..."
-                tagContainerStyle={{
-                  backgroundColor: "white",
-                  flexDirection: "row",
-                  width: "48%",
-                }}
-                tagRemoveIconColor="#F49097"
-                tagBorderColor="black"
-                tagTextColor="black"
-                selectedItemIconColor="#F49097"
-                selectedItemTextColor="#CCC"
-                fixedHeight={true}
-                itemTextColor="#000"
-                dropdownPosition="top"
-                submitButtonColor="#55D6C2"
-                submitButtonText="Confirm"
-                styleDropdownMenuSubsection={styles.input}
-                styleListContainer={{ height: 150, width: "100%" }}
-                searchInputStyle={{
-                  height: 50,
-                }}
-              />
-            </View>
-            <View ref={contentRef}>
-              <CustomTextInput
-                control={control}
-                header="Post Content"
-                fieldName="postContent"
-                placeholder="Enter post content here..."
-                defaultValue={postContent}
-                multiline={true}
-                numberOfLines={10}
-                onChangeText={setPostContent}
-                onPress={handleTextInputPress}
-                rules={{
-                  maxLength: {
-                    value: 1000,
-                    message:
-                      "The post cannot be more than 1000 characters long",
-                  },
-                }}
-              />
-            </View>
-            {isEvent ? (
-              <View>
-                <View>
-                  <Text style={styles.inputHeader}>Date of Event</Text>
-                </View>
-                <View
-                  style={{ flexDirection: "row", justifyContent: "flex-start" }}
-                >
-                  <View
-                    style={[
-                      {
-                        width: 200,
-                        borderColor: "#6F6F6F",
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        marginRight: 10,
-                        padding: 10,
-                        fontSize: 16,
-                        height: 50,
-                        backgroundColor: "white",
-                      },
-                    ]}
-                  >
-                    {isDateVisible ? (
-                      <Text>{eventDateString} </Text>
-                    ) : (
-                      <Text> Select Date</Text>
-                    )}
-                  </View>
-                  <Pressable onPress={openDatePicker}>
-                    <CalendarIcon />
-                  </Pressable>
-                </View>
-              </View>
-            ) : null}
-            <Modal
-              visible={isDatePickerVisible}
-              animationType="fade"
-              transparent={true}
-            >
-              <TouchableOpacity
-                activeOpacity={1}
-                style={styles2.modalContainer}
-                onPressOut={() => setIsDatePickerVisible(false)}
+                style={{ flexDirection: "row", justifyContent: "flex-start" }}
               >
-                <View style={styles2.modalContent}>
-                  <View>
-                    <DateTimePicker
-                      value={eventDateTime}
-                      mode="date"
-                      display="spinner"
-                      onChange={handleDateChange}
-                      themeVariant="light"
-                      minimumDate={new Date()}
-                      timeZoneOffsetInMinutes={undefined}
-                    />
-                  </View>
-                  {Platform.OS === "android" ? (
-                    ""
+                <View
+                  style={[
+                    {
+                      width: 200,
+                      borderColor: "#6F6F6F",
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      marginRight: 10,
+                      padding: 10,
+                      fontSize: 16,
+                      height: 50,
+                      backgroundColor: "white",
+                    },
+                  ]}
+                >
+                  {isDateVisible ? (
+                    <Text>{eventDateString} </Text>
                   ) : (
-                    <View style={{ marginTop: 20 }}>
-                      <CustomButton
-                        text={"Confirm"}
-                        type="big"
-                        onPress={() => setIsDatePickerVisible(false)}
-                      />
-                    </View>
+                    <Text> Select Date</Text>
                   )}
                 </View>
-              </TouchableOpacity>
-            </Modal>
-            {isEvent ? (
-              <View>
-                <View>
-                  <Text style={styles.inputHeader}>Time of Event</Text>
-                </View>
-                <View
-                  style={{ flexDirection: "row", justifyContent: "flex-start" }}
-                >
-                  <View
-                    style={[
-                      {
-                        width: 200,
-                        borderColor: "#6F6F6F",
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        marginRight: 10,
-                        padding: 10,
-                        fontSize: 16,
-                        height: 50,
-                        backgroundColor: "white",
-                      },
-                    ]}
-                  >
-                    {isTimeVisible ? (
-                      <Text>{eventTimeString} </Text>
-                    ) : (
-                      <Text> Select Time</Text>
-                    )}
-                  </View>
-
-                  <Pressable onPress={openTimePicker}>
-                    <ClockIcon />
-                  </Pressable>
-                </View>
+                <Pressable onPress={openDatePicker}>
+                  <CalendarIcon />
+                </Pressable>
               </View>
-            ) : null}
-            <Modal
-              visible={isTimePickerVisible}
-              animationType="fade"
-              transparent={true}
+            </View>
+          ) : null}
+          <Modal
+            visible={isDatePickerVisible}
+            animationType="fade"
+            transparent={true}
+          >
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles2.modalContainer}
+              onPressOut={() => setIsDatePickerVisible(false)}
             >
-              <TouchableOpacity
-                activeOpacity={1}
-                style={styles2.modalContainer}
-                onPressOut={() => setIsTimePickerVisible(false)}
-              >
-                <View style={styles2.modalContent}>
-                  <View>
-                    <DateTimePicker
-                      value={eventDateTime}
-                      mode="time"
-                      display="spinner"
-                      onChange={handleTimeChange}
-                      themeVariant="light"
+              <View style={styles2.modalContent}>
+                <View>
+                  <DateTimePicker
+                    value={eventDateTime}
+                    mode="date"
+                    display="spinner"
+                    onChange={handleDateChange}
+                    themeVariant="light"
+                    minimumDate={new Date()}
+                    timeZoneOffsetInMinutes={undefined}
+                  />
+                </View>
+                {Platform.OS === "android" ? (
+                  ""
+                ) : (
+                  <View style={{ marginTop: 20 }}>
+                    <CustomButton
+                      text={"Confirm"}
+                      type="big"
+                      onPress={() => setIsDatePickerVisible(false)}
                     />
                   </View>
-                  {Platform.OS === "android" ? (
-                    ""
+                )}
+              </View>
+            </TouchableOpacity>
+          </Modal>
+          {isEvent ? (
+            <View>
+              <View>
+                <Text style={styles.inputHeader}>Time of Event</Text>
+              </View>
+              <View
+                style={{ flexDirection: "row", justifyContent: "flex-start" }}
+              >
+                <View
+                  style={[
+                    {
+                      width: 200,
+                      borderColor: "#6F6F6F",
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      marginRight: 10,
+                      padding: 10,
+                      fontSize: 16,
+                      height: 50,
+                      backgroundColor: "white",
+                    },
+                  ]}
+                >
+                  {isTimeVisible ? (
+                    <Text>{eventTimeString} </Text>
                   ) : (
-                    <View style={{ marginTop: 20 }}>
-                      <CustomButton
-                        text={"Confirm"}
-                        type="big"
-                        onPress={() => setIsTimePickerVisible(false)}
-                      />
-                    </View>
+                    <Text> Select Time</Text>
                   )}
                 </View>
-              </TouchableOpacity>
-            </Modal>
 
-            <View style={[styles.buttonContainer, { marginTop: 20 }]}>
-              <CustomButton
-                text={"Cancel"}
-                onPress={onCancelHandler}
-                style={styles.button}
-              />
-              <CustomButton
-                text={saveButtonText}
-                onPress={handleSubmit(onPostHandler)}
-                style={styles.button}
-              />
+                <Pressable onPress={openTimePicker}>
+                  <ClockIcon />
+                </Pressable>
+              </View>
             </View>
+          ) : null}
+          <Modal
+            visible={isTimePickerVisible}
+            animationType="fade"
+            transparent={true}
+          >
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles2.modalContainer}
+              onPressOut={() => setIsTimePickerVisible(false)}
+            >
+              <View style={styles2.modalContent}>
+                <View>
+                  <DateTimePicker
+                    value={eventDateTime}
+                    mode="time"
+                    display="spinner"
+                    onChange={handleTimeChange}
+                    themeVariant="light"
+                  />
+                </View>
+                {Platform.OS === "android" ? (
+                  ""
+                ) : (
+                  <View style={{ marginTop: 20 }}>
+                    <CustomButton
+                      text={"Confirm"}
+                      type="big"
+                      onPress={() => setIsTimePickerVisible(false)}
+                    />
+                  </View>
+                )}
+              </View>
+            </TouchableOpacity>
+          </Modal>
+
+          <View style={[styles.buttonContainer, { marginTop: 20 }]}>
+            <CustomButton
+              text={"Cancel"}
+              onPress={onCancelHandler}
+              style={styles.button}
+            />
+            <CustomButton
+              text={saveButtonText}
+              onPress={handleSubmit(onPostHandler)}
+              style={styles.button}
+            />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

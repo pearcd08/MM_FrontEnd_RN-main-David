@@ -22,6 +22,7 @@ function PostCard({
   postContentCategory,
   authorUser,
   currentUser,
+  refreshHandler
 }) {
   const navigation = useNavigation();
   const token = currentUser.token;
@@ -159,6 +160,7 @@ function PostCard({
 
   function confirmDeleteHandler(result) {
     setDoDelete(result);
+    refreshHandler();
   }
 
   function onDeleteHandler() {
