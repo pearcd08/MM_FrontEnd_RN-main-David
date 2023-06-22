@@ -40,7 +40,7 @@ function CreateForumPost({ route }) {
       .catch((error) => {
         console.log(error);
       });
-    navigation.goBack();
+    navigation.navigate("ViewAllForumPosts");
   }
 
   return (
