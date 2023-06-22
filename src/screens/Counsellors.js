@@ -199,7 +199,6 @@ const Counsellors = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text style={styles.titleHeader}> Counsellors</Text>
         {ranked ? (
           <FlatList
             data={counsellors}

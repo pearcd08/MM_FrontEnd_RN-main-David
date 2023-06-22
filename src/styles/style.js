@@ -296,12 +296,20 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   forumUsername: {
-    fontSize: 20,
-    fontFamily: "InterRegular",
+    fontSize: 16,
+    fontFamily: "Inter",
+    fontStyle: "italic",
+    fontWeight: "medium",
   },
   forumTitle: {
     fontSize: 24,
-    fontFamily: "InterMedium",
+    fontFamily: "InterBold",
+  },
+
+  forumCreatedOn: {
+    fontSize: 14,
+    fontFamily: "Inter",
+    fontStyle: "italic",
   },
 
   //modal styles

@@ -17,7 +17,7 @@ import TrashIcon from "../icons/TrashIcon";
 import EditIcon from "../icons/EditIcon";
 import axios from "axios";
 import { isEqual } from "lodash";
-
+import PlusIcon from "../icons/PlusIcon";
 export default function ForumPostDetail({ route }) {
   // Gains access to navigation.
   const navigation = useNavigation();
@@ -156,7 +156,7 @@ export default function ForumPostDetail({ route }) {
   return (
     <View style={styles.inputContainer}>
       <ScrollView>
-        {authorIsCurrentUser ? (
+        {/* {authorIsCurrentUser ? (
           <View style={{ flexDirection: "row", alignContent: "center" }}>
             <Pressable onPress={onPostEditHandler} style={{ marginRight: 100 }}>
               <EditIcon />
@@ -165,10 +165,23 @@ export default function ForumPostDetail({ route }) {
               <TrashIcon />
             </Pressable>
           </View>
-        ) : null}
-        <Text style={styles.forumTitle}>{postData.title}</Text>
-        <Text style={styles.forumUsername}>{postData.authorName}</Text>
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        ) : null} */}
+        <View style={{ marginTop: 20, marginBotton: 20 }}>
+          <Text style={styles.forumUsername}>{postData.authorName}</Text>
+          <Text style={styles.forumTitle}>{postData.title}</Text>
+          <Text style={styles.forumCreatedOn}>
+            Created on {postData.createdOnString}
+          </Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
           {postData.keywordBadges.map((keyword) => {
             return (
               <View key={keyword}>
@@ -183,11 +196,11 @@ export default function ForumPostDetail({ route }) {
               Event Date: {postData.eventDateString} at{" "}
               {postData.eventTimeString}
             </Text>
-            <CustomButton
+            {/* <CustomButton
               text={"Attend"}
               onPress={onAttendEventHandler}
               type={"small"}
-            />
+            /> */}
           </View>
         ) : (
           ""

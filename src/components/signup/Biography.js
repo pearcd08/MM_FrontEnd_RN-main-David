@@ -67,11 +67,11 @@ const Biography = ({
         <View style={styles.inputContainer}>
           <CustomTextInput
             control={control}
-            header=""
+            header="Business Biography"
             fieldName="biography"
             placeholder="Start writing here..."
             multiline={true}
-            numberOfLines={8}
+            numberOfLines={5}
             defaultValue={biography || ""}
             returnKeyType={"none"}
             rules={{
@@ -107,8 +107,6 @@ const Biography = ({
             />
           </View>
         )}
-
-        <View style={styles.bottomContainer}></View>
       </View>
     </TouchableWithoutFeedback>
   );
